@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { deleteEvent, getEventById } from "../assets/services/api.js";
+import { deleteEvent, getEventById } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function EventDetailPage() {

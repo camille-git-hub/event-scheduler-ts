@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createEvent } from "../assets/services/api.js";
+import { createEvent } from "../services/api.js";
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm.js";
 

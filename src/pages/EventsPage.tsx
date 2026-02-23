@@ -1,5 +1,5 @@
 import EventCard from "../components/EventCard.js"
-import { getAllEvents } from "../assets/services/api.js";
+import { getAllEvents } from "../services/api.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getEventById, updateEvent } from "../assets/services/api.js";
+import { getEventById, updateEvent } from "../services/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 import EventForm from "../components/EventForm.js";
 

@@ -1,3 +1,6 @@
+
+import { ApiEventSchema } from '../types';
+
 const API_URL: string = (import.meta.env.VITE_API_URL) || "http://localhost:3001";
 
 console.log('API_URL:', API_URL); 
@@ -7,32 +10,46 @@ function getToken() {
   return localStorage.getItem("token");
 }
 
-const getIncomingEvents = async () => {
+const getIncomingEvents = async (API_URL: string) => {
     try {
-        const response = await fetch(`${API_URL}/api/events/incoming`); 
-        if (!response.ok) {
-            throw new Error(`Error found: ${response.status})`);
-        }
-        const data = await response.json();
-        console.log('Is array?', Array.isArray(data));
-        console.log('Data length:', data?.length);
+        console.log('🔍 Fetching from:', `${API_URL}/api/events/incoming`);
         
-        return Array.isArray(data) ? data : [];
-    } catch (err) {
-        console.error('Error:', err);
-        throw new Error('Failed to load events. Please try again.');
+        const response = await fetch(`${API_URL}/api/events/incoming`); 
+        console.log('📡 Response status:', response.status);
 
+        const data = await response.json();
+        console.log('📦 Raw data received:', data);  // ← What does API send?
+        
+        const result = ApiEventSchema.safeParse(data);
+        console.log('✅ Validation success?:', result.success);
+        
+        if (!result.success) {
+            console.error('❌ Validation errors:', result.error);  // ← What's wrong?
+            console.error('❌ Full error:', result.error);
+            throw new Error('Invalid API response format');
+        }
+        
+        return result.data.results;
+    } catch (err) {
+        console.error('💥 Error:', err);
+        throw new Error('Failed to load events. Please try again.');
     }
 };
+
+
+
 
 const getAllEvents = async () => {
     try {
         const response = await fetch(`${API_URL}/api/events`); 
-        if (!response.ok) {
-            throw new Error(`Error found: ${response.status})`);
-        }
+
         const data = await response.json();
-        return data.results;
+        const result = ApiEventSchema.safeParse(data);
+        if (!result.success) {
+            console.error('Validation errors:', result.error);
+            throw new Error('Invalid API response format');
+        }
+        return result.data.results;
     } catch (err) {
         console.error('Error:', err);
         throw new Error('Failed to load events. Please try again.');
@@ -198,3 +215,7 @@ const deleteEvent = async (id) => {
 };
 
 export { getIncomingEvents, getAllEvents, getToken, signUp, createEvent, getEventById, updateEvent, deleteEvent, login };  
+
+
+
+

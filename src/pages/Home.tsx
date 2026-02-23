@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { getIncomingEvents } from "../assets/services/api.js";
+import { getIncomingEvents } from "../services/api.js";
 import EventCard from "../components/EventCard.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import type { ReactProviderProps, EventSchema } from "../types/index.js";
+
 
 export default function Home() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<typeof EventSchema[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
