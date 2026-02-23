@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../../../../JS/event-scheduler/src/context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.tsx";
 
 export default function ProtectedRoute() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth() as { isAuthenticated: boolean; loading: boolean };
 
   if (loading) {
     return (

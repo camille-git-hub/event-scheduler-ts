@@ -5,14 +5,18 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { loginUser } = useAuth();
+  const auth = useAuth();
+  if (!auth) {
+    throw new Error("Auth context is not available");
+  }
+  const { loginUser } = auth;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
@@ -24,7 +28,7 @@ export default function LoginPage() {
 
       navigate("/");
     } catch (e2) {
-      setError(e2.message);
+      setError((e2 as Error).message);
     }
   }
 

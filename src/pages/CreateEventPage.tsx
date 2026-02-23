@@ -2,16 +2,18 @@ import { useState } from "react";
 import { createEvent } from "../services/api.js";
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm.js";
+import type { Event } from "../types/index.js";
 
 export default function CreateEventPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  async function handleCreate(formData) {
+  async function handleCreate(formData: Event) {
     try {
       setError("");
 
       const eventData = {
+        id: 0,
         title: formData.title,
         date: formData.date ? new Date(formData.date).toISOString() : null,
         location: formData.location,
@@ -21,11 +23,11 @@ export default function CreateEventPage() {
       console.log('Form data:', formData);
       console.log('Token:', localStorage.getItem('token'));
 
-      const created = await createEvent(eventData);
+      const created = await createEvent(eventData as Event);
 
       navigate(`/events/${created.id}`);
     } catch (e) {
-      setError(e.message);
+      setError((e as Error).message);
     }
   }
 
@@ -36,7 +38,7 @@ export default function CreateEventPage() {
       {error && <div className="alert alert-error">{error}</div>}
 
       <EventForm
-        initialValues={{}}
+        initialValues={{ title: "", date: "", location: "", description: "" }}
         onSubmit={handleCreate}
         submitText="Create"
       />

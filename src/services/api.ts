@@ -1,5 +1,6 @@
 
 import { ApiEventSchema } from '../types';
+import type { Event, User, AuthResponse } from '../types';
 
 const API_URL: string = (import.meta.env.VITE_API_URL) || "http://localhost:3001";
 
@@ -10,7 +11,7 @@ function getToken() {
   return localStorage.getItem("token");
 }
 
-const getIncomingEvents = async (API_URL: string) => {
+const getIncomingEvents = async (): Promise<Event[]> => {
     try {
         console.log('🔍 Fetching from:', `${API_URL}/api/events/incoming`);
         
@@ -28,8 +29,8 @@ const getIncomingEvents = async (API_URL: string) => {
             console.error('❌ Full error:', result.error);
             throw new Error('Invalid API response format');
         }
-        
         return result.data.results;
+        
     } catch (err) {
         console.error('💥 Error:', err);
         throw new Error('Failed to load events. Please try again.');
@@ -39,7 +40,7 @@ const getIncomingEvents = async (API_URL: string) => {
 
 
 
-const getAllEvents = async () => {
+const getAllEvents = async (): Promise<Event[]> => {
     try {
         const response = await fetch(`${API_URL}/api/events`); 
 
@@ -57,7 +58,7 @@ const getAllEvents = async () => {
     }
 };
 
-const signUp = async (userData) => {
+const signUp = async (userData: User): Promise<{ success: boolean; message?: string }> => {
     try {
         const response = await fetch(`${API_URL}/api/users`, {
             method: 'POST',
@@ -77,7 +78,7 @@ const signUp = async (userData) => {
     }
 };
 
-const login = async (credentials) => {
+const login = async (credentials: User): Promise<AuthResponse> => {
     try {
         const response = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
@@ -97,7 +98,9 @@ const login = async (credentials) => {
     }
 };
 
-const createEvent = async (eventData) => {
+const createEvent = async (eventData: Omit<Event, 'id'>): Promise<{
+  id: any; success: boolean; message?: string 
+}> => {
     try {
         const token = getToken();
         const response = await fetch(`${API_URL}/api/events`, {
@@ -119,7 +122,7 @@ const createEvent = async (eventData) => {
     }
 };
 
-const updateEvent = async (id, eventData) => {
+const updateEvent = async (id: number | string, eventData: Partial<Event>): Promise<{ success: boolean; message?: string }> => {
     try {
         const token = getToken();
         const response = await fetch(`${API_URL}/api/events/${id}`, {
@@ -142,7 +145,7 @@ const updateEvent = async (id, eventData) => {
     }
 };
 
-const getEventById = async (id) => {
+const getEventById = async (id: number): Promise<Event> => {
     try {
         const response = await fetch(`${API_URL}/api/events/${id}`);
         if (!response.ok) {
@@ -156,7 +159,7 @@ const getEventById = async (id) => {
     }
 };
 
-const deleteEvent = async (id) => {
+const deleteEvent = async (id: number): Promise<{ success: boolean; message?: string }> => {
     try {
         const token = getToken();
         

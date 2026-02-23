@@ -1,7 +1,8 @@
 import { useState } from "react";
+import type { Event } from "../types/index.js";
 
-export default function EventForm({ initialValues, onSubmit, submitText }) {
-  const [title, setTitle] = useState(initialValues.title || "");
+export default function EventForm({ initialValues, onSubmit, submitText }: { initialValues: Event, onSubmit: (data: Event) => void, submitText: string }) {
+  const [title, setTitle] = useState(initialValues.title|| "");
   const [date, setDate] = useState(initialValues.date || "");
   const [location, setLocation] = useState(initialValues.location || "");
   const [description, setDescription] = useState(initialValues.description || "");
@@ -12,7 +13,7 @@ export default function EventForm({ initialValues, onSubmit, submitText }) {
 
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!title.trim()) {

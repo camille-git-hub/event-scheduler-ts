@@ -3,14 +3,16 @@ import { getAllEvents } from "../services/api.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import type { Event } from "../types/index.js";
 
 export default function EventsPage() {
 
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const auth = useAuth();
+    const isAuthenticated = auth?.isAuthenticated ?? false;
 
     useEffect(() => {
         async function load() {
@@ -23,12 +25,12 @@ export default function EventsPage() {
 
                 const sorted = [...events].sort((a, b) => {
                     if (!a.date || !b.date) return 0;
-                    return new Date(a.date) - new Date(b.date);
+                    return new Date(a.date).getTime() - new Date(b.date).getTime();
                 });
 
-                setEvents(sorted);
+                setEvents(sorted as Event[]);
             } catch (e) {
-                setError(e.message);
+                setError((e as Error).message);
             } finally {
                 setLoading(false);
             }

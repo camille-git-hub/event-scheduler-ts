@@ -21,4 +21,17 @@ export type ReactProviderProps = {
 };
 
 
+export type User = {
+  email: string;
+  password: string;
+  name?: string;
+};
+
+export type AuthResponse = {
+  token: string;
+  user: {
+    id?: number;
+    email: string;
+  };
+};
 

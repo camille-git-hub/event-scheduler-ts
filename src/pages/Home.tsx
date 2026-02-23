@@ -3,15 +3,16 @@ import { getIncomingEvents } from "../services/api.js";
 import EventCard from "../components/EventCard.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import type { ReactProviderProps, EventSchema } from "../types/index.js";
+import type { ReactProviderProps, EventSchema, ApiEventSchema, Event } from "../types/index.js";
 
 
 export default function Home() {
-  const [events, setEvents] = useState<typeof EventSchema[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const auth = useAuth();
+  const isAuthenticated = auth?.isAuthenticated ?? false;
 
   useEffect(() => {
     async function load() {
@@ -24,12 +25,12 @@ export default function Home() {
 
         const sorted = [...data].sort((a, b) => {
           if (!a.date || !b.date) return 0;
-          return new Date(a.date) - new Date(b.date);
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
 
-        setEvents(sorted);
+        setEvents(sorted as Event[]);
       } catch (e) {
-        setError(e.message);
+        setError((e as Error).message);
       } finally {
         setLoading(false);
       }

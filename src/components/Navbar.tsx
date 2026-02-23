@@ -2,7 +2,7 @@ import { useAuth } from "../context/AuthContext.tsx";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const { isAuthenticated, logoutUser } = useAuth();
+  const { isAuthenticated, logoutUser }: { isAuthenticated: boolean; logoutUser: () => void } = useAuth() as { isAuthenticated: boolean; logoutUser: () => void };
   const navigate = useNavigate();
 
   function handleLogout() {

@@ -19,7 +19,7 @@ export default function SignUpPage() {
     return null;
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setError("");
@@ -34,7 +34,7 @@ export default function SignUpPage() {
       await signUp({ email, password });
       navigate("/login");
     } catch (e2) {
-      setError(e2.message);
+      setError((e2 as Error).message);
     }
   }
 

@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { deleteEvent, getEventById } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import type { Event } from "../types/index.js";
 
 export default function EventDetailPage() {
-  const { id } = useParams(); 
+  const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const auth = useAuth();
+  const isAuthenticated = auth?.isAuthenticated ?? false;
 
-  const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -16,10 +18,10 @@ export default function EventDetailPage() {
     async function load() {
       try {
         setError("");
-        const data = await getEventById(id);
+        const data = await getEventById(Number(id));
         setEvent(data);
       } catch (e) {
-        setError(e.message);
+        setError((e as Error).message);
       } finally {
         setLoading(false);
       }
@@ -30,10 +32,10 @@ export default function EventDetailPage() {
 
   async function handleDelete() {
     try {
-      await deleteEvent(id);
+      await deleteEvent(Number(id));
       navigate("/events");
     } catch (e) {
-      setError(e.message);
+      setError((e as Error).message);
     }
   }
 

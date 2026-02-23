@@ -2,28 +2,29 @@ import { useEffect, useState } from "react";
 import { getEventById, updateEvent } from "../services/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 import EventForm from "../components/EventForm.js";
+import type { Event } from "../types/index.js";
 
 export default function EditEventPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [initialValues, setInitialValues] = useState(null);
+  const [initialValues, setInitialValues] = useState(null as Event | null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     async function load() {
       try {
         setError("");
-        const data = await getEventById(id);
+        const data = await getEventById(Number(id));
         setInitialValues(data);
       } catch (e) {
-        setError(e.message);
+        setError((e as Error).message);
       }
     }
     load();
   }, [id]);
 
-  async function handleUpdate(formData) {
+  async function handleUpdate(formData: Event) {
     try {
       setError("");
 
@@ -32,10 +33,10 @@ export default function EditEventPage() {
         date: formData.date ? new Date(formData.date).toISOString() : null,
       };
 
-      await updateEvent(id, eventData);
+      await updateEvent(Number(id), eventData as Partial<Event>);
       navigate(`/events/${id}`);
     } catch (e) {
-      setError(e.message);
+      setError((e as Error).message);
     }
   }
 
