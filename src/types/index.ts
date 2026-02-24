@@ -11,7 +11,7 @@ export const EventSchema = z.object({
 
 export const ApiEventSchema = z.object({
   results: z.array(EventSchema)
-}).strip();
+}).strip().nullable();
 
 export type Event = z.infer<typeof EventSchema>;
 

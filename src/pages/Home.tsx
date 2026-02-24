@@ -18,12 +18,9 @@ export default function Home() {
     async function load() {
       try {
         setError("");
-        const data = await getIncomingEvents();
-        console.log("Data from getIncomingEvents:", data);
-        console.log("Data type:", typeof data);
-        console.log("Data length:", data?.length);
-
-        const sorted = [...data].sort((a, b) => {
+        const data: Event[] = await getIncomingEvents();
+      
+        const sorted = [...(data || [])].sort((a, b) => {
           if (!a.date || !b.date) return 0;
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });

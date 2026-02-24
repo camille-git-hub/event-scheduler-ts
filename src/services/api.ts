@@ -4,39 +4,31 @@ import type { Event, User, AuthResponse } from '../types';
 
 const API_URL: string = (import.meta.env.VITE_API_URL) || "http://localhost:3001";
 
-console.log('API_URL:', API_URL); 
-console.log('ENV:', import.meta.env.VITE_API_URL);
-
 function getToken() {
   return localStorage.getItem("token");
 }
 
 const getIncomingEvents = async (): Promise<Event[]> => {
     try {
-        console.log('🔍 Fetching from:', `${API_URL}/api/events/incoming`);
-        
         const response = await fetch(`${API_URL}/api/events/incoming`); 
-        console.log('📡 Response status:', response.status);
 
         const data = await response.json();
         
         const result = ApiEventSchema.safeParse(data);
-        console.log('Validation success?:', result.success);
         
         if (!result.success) {
-            console.error('Validation errors:', result.error);
-            console.error('Full error:', result.error);
             throw new Error('Invalid API response format');
+        }
+
+        if (result.data === null) {
+            return [];
         }
         return result.data.results;
         
     } catch (err) {
-        console.error('Error:', err);
         throw new Error('Failed to load events. Please try again.');
     }
 };
-
-
 
 
 const getAllEvents = async (): Promise<Event[]> => {
@@ -46,8 +38,10 @@ const getAllEvents = async (): Promise<Event[]> => {
         const data = await response.json();
         const result = ApiEventSchema.safeParse(data);
         if (!result.success) {
-            console.error('Validation errors:', result.error);
             throw new Error('Invalid API response format');
+        }
+        if (result.data === null) {
+            return [];
         }
         return result.data.results;
     } catch (err) {

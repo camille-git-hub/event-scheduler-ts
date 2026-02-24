@@ -13,7 +13,6 @@ export default function CreateEventPage() {
       setError("");
 
       const eventData = {
-        id: 0,
         title: formData.title,
         date: formData.date ? new Date(formData.date).toISOString() : null,
         location: formData.location,

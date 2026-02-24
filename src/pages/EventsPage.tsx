@@ -19,9 +19,6 @@ export default function EventsPage() {
             try {
                 setError("");
                 const events = await getAllEvents();
-                console.log("Data from getAllEvents:", events);
-                console.log("Data type:", typeof events);
-                console.log("Data length:", events?.length);
 
                 const sorted = [...events].sort((a, b) => {
                     if (!a.date || !b.date) return 0;
