@@ -8,7 +8,7 @@ export default function CreateEventPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  async function handleCreate(formData: Event) {
+  async function handleCreate(formData: Omit<Event, "id">) {
     try {
       setError("");
 

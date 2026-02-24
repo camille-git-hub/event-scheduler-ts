@@ -9,7 +9,6 @@ import CreateEventPage from "./pages/CreateEventPage.jsx";
 import EditEventPage from "./pages/EditEventPage.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import type { ReactProviderProps } from "./types/index.js";
 
 function App() {
   return (

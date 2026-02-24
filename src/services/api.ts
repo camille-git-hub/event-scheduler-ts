@@ -19,20 +19,19 @@ const getIncomingEvents = async (): Promise<Event[]> => {
         console.log('📡 Response status:', response.status);
 
         const data = await response.json();
-        console.log('📦 Raw data received:', data);  // ← What does API send?
         
         const result = ApiEventSchema.safeParse(data);
-        console.log('✅ Validation success?:', result.success);
+        console.log('Validation success?:', result.success);
         
         if (!result.success) {
-            console.error('❌ Validation errors:', result.error);  // ← What's wrong?
-            console.error('❌ Full error:', result.error);
+            console.error('Validation errors:', result.error);
+            console.error('Full error:', result.error);
             throw new Error('Invalid API response format');
         }
         return result.data.results;
         
     } catch (err) {
-        console.error('💥 Error:', err);
+        console.error('Error:', err);
         throw new Error('Failed to load events. Please try again.');
     }
 };
@@ -99,8 +98,7 @@ const login = async (credentials: User): Promise<AuthResponse> => {
 };
 
 const createEvent = async (eventData: Omit<Event, 'id'>): Promise<{
-  id: any; success: boolean; message?: string 
-}> => {
+  id: number; success: boolean; message?: string}> => {
     try {
         const token = getToken();
         const response = await fetch(`${API_URL}/api/events`, {

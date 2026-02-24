@@ -3,7 +3,7 @@ import { getIncomingEvents } from "../services/api.js";
 import EventCard from "../components/EventCard.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import type { ReactProviderProps, EventSchema, ApiEventSchema, Event } from "../types/index.js";
+import type { Event } from "../types/index.js";
 
 
 export default function Home() {
