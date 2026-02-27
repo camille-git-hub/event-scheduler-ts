@@ -51,7 +51,7 @@ const getAllEvents = async (): Promise<Event[]> => {
     }
 };
 
-const signUp = async (userData: User): Promise<{ success: boolean; message?: string }> => {
+const signUp = async (userData: User): Promise<AuthResponse> => {
     try {
         const response = await fetch(`${API_URL}/api/users`, {
             method: 'POST',
@@ -91,8 +91,7 @@ const login = async (credentials: User): Promise<AuthResponse> => {
     }
 };
 
-const createEvent = async (eventData: Omit<Event, 'id'>): Promise<{
-  id: number; success: boolean; message?: string}> => {
+const createEvent = async (eventData: Omit<Event, 'id'>): Promise<Event> => {
     try {
         const token = getToken();
         const response = await fetch(`${API_URL}/api/events`, {
